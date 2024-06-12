@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="./assets/logo.png" type="image/x-icon"/>
+    <link rel="stylesheet" href="index.css">
+    <title>Profile</title>
+</head>
+<body>
+    <header class="header-bar">
+        <nav class="nav-bar">
+            <ul class="nav-list">
+                <li id="home-nav" class="nav-item"><a href="#home">Home</a></li>
+                <li id="projects-nav" class="nav-item"><a href="#projects">Projects</a></li>
+                <li id="about-nav" class="nav-item"><a href="#about">About</a></li>
+                <li id="contact-nav" class="nav-item"><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="content">
+        <section id="home" class="content-section">
+            <article id="photo">
+                <img src="assets/ishan2.png" id="self-image">
+            </article>
+            <article id="basic-info">
+                Hello, This is Ishan Sahu, and I am a software development engineer.
+            </article>
+        </section>            
+        <section id="projects" class="content-section">
+            <h1>Projects</h1>
+            <p>Learn more about us on this page.</p>
+        </section>
+        <section id="about" class="content-section">
+            <h1>About</h1>
+            <p>Learn more about us on this page.</p>
+        </section>
+
+        <section id="contact" class="content-section">
+            <article id="contact-form">
+                <div id="left-contact-section">
+                    <h2>How to reach me?</h2>
+                    <div id="address" class="left-contact-item">
+                        <img src="assets/location.svg" class="left-contact-icon" alt="location">
+                        <p>South City 1, Block A, Gurugram, Haryana, India 122001</p>
+                    </div>
+                    <div id="phone" class="left-contact-item">
+                        <img src="assets/phone.svg" class="left-contact-icon" alt="phone">
+                        <p>+91 9869 321 206</p>
+                    </div>
+                    <div id="email" class="left-contact-item">
+                        <img src="assets/email.svg" class="left-contact-icon" alt="email">
+                        <a href="mailto:sahuishan01@gmail.com" target="_blank">sahuishan01@gmail.com</a>
+                    </div>
+                    <div id="github" class="left-contact-item">
+                        <img src="assets/github.svg" class="left-contact-icon" alt="github">
+                        <a href="https://github.com/sahuishan01" target="_blank">sahuishan01</a>
+                    </div>
+                    <div id="linkedin" class="left-contact-item">
+                        <img src="assets/linkedin.svg" class="left-contact-icon" alt="linkedin">
+                        <a href="https://www.linkedin.com/in/sahuishan/" target="_blank">Ishan Sahu</a>
+                    </div>
+                </div>
+                <div id="right-contact-section">
+                    <h2>A chat perhaphs?</h2>
+                    <div id="mail-form">
+                        <div id="name-email">
+                            <div class="input-field">
+                                <div>Name:</div>
+                                <input type="text" name="name"/>
+                            </div>
+                            <div class="input-field">
+                                <div>Email:</div>
+                                <input type="email" name="email"/>
+                            </div>
+                        </div>
+                        <div id="summary">
+                            <div class="input-field">
+                                <div>Subject:</div>
+                                <input type="text">
+                            </div>
+                        </div>
+                        <div id="message">
+                            <div class="input-field">
+                                <div>Message: </div>
+                                <textarea ></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>            
+        </section>
+
+    </main>
+    
+    <script src="index.js"></script>
+</body>
+</html>
