@@ -1,10 +1,14 @@
 :root {
     --headerSize: 60px;
 }
+
+@font-face { font-family: TT-HOVES-REGULAR; src: url('./assets/TTHoves-Regular.woff2'); } 
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: TT-HOVES-REGULAR   ;
 }
 
 html{
@@ -65,10 +69,9 @@ body {
 .nav-item.active{
     background-color: wheat;
 }
-.nav-item.nav-item.active a{
+.nav-item.active a{
     color: black;
     text-transform: uppercase;
-    text-decoration: underline;
 }
 
 .content {  
@@ -110,20 +113,63 @@ body {
     justify-content: start;
 }
 
-#self-image:hover{
-    filter: drop-shadow(2px 2px 2px wheat);
-}
-
 #self-image{
     width: 80%;
     height: auto;
     border-radius: 50%;
 }
 
-/* #about{
-    background-color: pink;
+#basic-info{
+    display: flex;
+    flex-direction: column;
+    color: wheat;
+    align-items: flex-start;
+    justify-content: center;
+    padding-right: 20%;
 }
-#projects{background-color: yellowgreen;} */
+
+#basic-info > h3 {
+    letter-spacing: 4px;
+    word-spacing: 10px;
+    color: white;
+    padding-left: 1%;
+}
+
+#basic-info > h1 {
+    font-size: 4rem;
+    padding-left: 1%;
+    letter-spacing: 2px;
+}
+
+#basic-info > hr {
+    opacity: 0.9;
+    border: 2px solid white;
+    width: 100%;
+    margin-top: -5px;
+}
+
+#basic-info > p {
+    color: white;
+    font-size: 1.5rem;
+}
+
+#projects{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    row-gap: 10%;
+    padding: 10% 0;
+}
+
+.project{
+    width: 30%;
+    border: 1px solid wheat;
+}
+
+.project > ul {
+    color: white;
+}
+
 
 #contact-form{
     height: min(40vw, 80%);
