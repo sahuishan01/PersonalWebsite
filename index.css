@@ -1,14 +1,17 @@
+@font-face { font-family: TT-HOVES-REGULAR; src: url('./assets/TTHoves-Regular.woff2'); } 
 :root {
     --headerSize: 60px;
+    --fontFamily: TT-HOVES-REGULAR, 'Roboto Mono', monospace;
+    --color-primary: rgba(36, 36, 36, 0.97);
+    --color-secondary: wheat;
+    --color-alternate: white;
 }
-
-@font-face { font-family: TT-HOVES-REGULAR; src: url('./assets/TTHoves-Regular.woff2'); } 
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: TT-HOVES-REGULAR   ;
+    font-family: var(--fontFamily);
 }
 
 html{
@@ -22,6 +25,7 @@ body {
 }
 
 .header-bar {
+    z-index: 1000;
     background-color: rgb(33, 33, 33);
     color: white;
     height: var(--headerSize);
@@ -67,7 +71,7 @@ body {
 }
 
 .nav-item.active{
-    background-color: wheat;
+    background-color: var(--color-secondary);
 }
 .nav-item.active a{
     color: black;
@@ -82,7 +86,7 @@ body {
     width: 100%;
     height: 100dvh;
     scroll-margin-top: var(--headerSize);
-    color: wheat;
+    color: var(--color-secondary);
     background-color: rgba(36, 36, 36, 0.97);
 }
 
@@ -122,7 +126,7 @@ body {
 #basic-info{
     display: flex;
     flex-direction: column;
-    color: wheat;
+    color: var(--color-secondary);
     align-items: flex-start;
     justify-content: center;
     padding-right: 20%;
@@ -154,20 +158,215 @@ body {
 }
 
 #projects{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    row-gap: 10%;
-    padding: 10% 0;
+    padding: 2% 5%;
+}
+
+#projects > h1{
+    text-align: center;
+    color: white;
+}
+
+.projects{
+    display: grid;
+    grid-template-columns: auto auto auto;
+    column-gap: 2%;
+    row-gap: 5%;
+    align-items: stretch;
+    padding-top: 1%;
+    height: 90%;
 }
 
 .project{
-    width: 30%;
-    border: 1px solid wheat;
+    border: 1px solid var(--color-secondary);
+    row-gap: 10%;
+    padding: 1%;
 }
 
 .project > ul {
     color: white;
+    margin: 2%;
+    font-size: 1.3rem;
+}
+
+.project a {
+    color: white;
+}
+
+.project a:visited {
+    color: white;
+    text-decoration: none !important;
+}
+
+#about {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#about button {
+    font-family: inherit;
+    border: none;
+    cursor: pointer;
+}
+
+.carousel-1, .carousel-2, .carousel-3 {
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    padding-left: 80px;
+    padding-right: 80px;
+}
+.carousel-1 h2, .carousel-2 h2, .carousel-3 h2{
+    padding: 0;
+    margin: 0;
+} 
+.carousel-1::after, .carousel-2::after, .carousel-3::after {
+    position: absolute;
+    left: 50px;
+    top: 60px;
+    display: block;
+    width: calc(100% - 100px);
+    height: 6px;
+    content: '';
+    background-color: var(--color-secondary);
+}
+
+
+.carousel-1::before, .carousel-2::before, .carousel-3::before {
+    position: absolute;
+    left: 0;
+    top: 60px;
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    content: '';
+    border: 3px dashed var(--color-secondary);
+}
+
+.item-header {
+    display: flex;
+    column-gap: 10px;
+    text-transform: uppercase;
+}
+
+.item-icon {
+    height: 40px;
+    filter: invert(91%) sepia(15%) saturate(705%) hue-rotate(339deg) brightness(100%) contrast(93%);
+}
+
+.arrow-left {
+    position: absolute;
+    top: 50%;
+    left: 50px;
+    transform: rotate(90deg);
+    cursor: pointer;
+    background: transparent;
+}
+.arrow-right {
+    position: absolute;
+    top: 50%;
+    right: 50px;
+    transform: rotate(-90deg);
+    background: transparent;
+    cursor: pointer;
+}
+
+.arrow-left span,.arrow-right span {
+    display: block;
+    width: 30px;
+    height: 30px;
+    border-bottom: 5px solid white;
+    border-right: 5px solid white;
+    transform: rotate(45deg);
+    margin: -10px;
+    animation: animate 2s infinite;
+}
+
+.arrow-left span:nth-child(2), .arrow-right span:nth-child(2) {
+    animation-delay: -0.2s;
+}
+
+.arrow-left span.paused, .arrow-right span.paused {
+    opacity: 0;
+    animation: animate 0s none;
+}
+
+@keyframes animate {
+    0% {
+        opacity: 0;
+        transform: rotate(45deg) translate(-20px, -20px);
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: rotate(45deg) translate(20px, 20px);
+    }
+}
+
+.carousel-1 .items, .carousel-2 .items, .carousel-3 .items {
+    width: 100%;
+    overflow: hidden;
+}
+
+.carousel-1 .cards, .carousel-2 .cards, .carousel-3 .cards {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    transition: transform 300ms ease-in-out;
+}
+
+.cards {
+    margin-top: 12px;
+    column-gap: 20px;
+}
+
+.node-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 250px;
+    justify-content: flex-start;
+}
+
+.data {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: flex-start;
+    text-align: center;
+    height: 200px;
+    width: 25vw;
+    color: var(--color-secondary);
+    white-space: pre;
+}
+
+.data h3{
+    font-weight: 600;
+}
+
+.data h4{
+    font-weight: 600;
+}
+
+.data p{
+    font-size: large;
+    white-space: pre;
+}
+
+.data h4, .data p{
+    color: var(--color-alternate);
+}
+
+
+.circle {
+    width: 20px;
+    height: 20px;
+    background-color: var(--color-secondary);
+    border-radius: 50%;
 }
 
 
@@ -180,7 +379,7 @@ body {
 }
 
 #left-contact-section{
-    background-color: wheat;
+    background-color: var(--color-secondary);
     color: black;
     padding: 20px;
     display: flex;
@@ -239,17 +438,17 @@ input{
     background-color: transparent;
     border-bottom: 2px solid white;
     width: 100%;
-    color: wheat;
+    color: var(--color-secondary);
     outline: none;
 }
 
 input:focus{
-    border-bottom: 2px solid wheat;
+    border-bottom: 2px solid var(--color-secondary);
     outline: none;
 }
 
 .input-field:has(> input:focus){
-    color: wheat;
+    color: var(--color-secondary);
 }
 
 textarea{
@@ -268,11 +467,19 @@ textarea{
 }
 
 textarea:focus{
-    color:wheat;
+    color:var(--color-secondary);
     outline: none;
-    border-color: wheat;
+    border-color: var(--color-secondary);
 }
 
 .input-field:has(>textarea:focus){
-    color:wheat;
+    color:var(--color-secondary);
+}
+
+button{
+    align-self: center;
+    padding: 2px 20px;
+    background-color: var(--color-secondary);
+    color: black;
+    width: max-content;
 }
