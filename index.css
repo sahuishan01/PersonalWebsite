@@ -317,16 +317,13 @@ body {
     padding: 0 40px;
 }
 
-.carousel-1 .cards, .carousel-2 .cards, .carousel-3 .cards {
+.cards{
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: flex-start;
-    transition: transform 300ms ease-in-out;
-}
-
-.cards {
     margin-top: 12px;
     column-gap: 250px;
+    transition: transform 300ms ease-in-out;
 }
 
 .node-card {
@@ -396,6 +393,7 @@ body {
     grid-template-columns: 10% auto;
     column-gap: 2%;
     align-items: center;
+    word-break: break-word;
 }
 
 .left-contact-icon{
@@ -510,4 +508,6 @@ button{
         row-gap: 50px;
         align-items: stretch;
     }
+
+    .cards{}
 }

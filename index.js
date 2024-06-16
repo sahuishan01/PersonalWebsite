@@ -42,7 +42,6 @@ function initializeCarousel(carouselClass) {
     const cardWidth = cards.querySelector(".node-card").getBoundingClientRect().width * 2;
     const visibleCardsCount = Math.floor(carousel.clientWidth / cardWidth);
     const totalCardsCount = cards.children.length;
-    console.log(cardWidth, totalCardsCount)
     const leftArrowSpans = carousel.querySelectorAll(".arrow-left span")
     const rightArrowSpans = carousel.querySelectorAll(".arrow-right span")
   
@@ -64,7 +63,7 @@ function initializeCarousel(carouselClass) {
         });
       }
   
-      const maxMove = (totalCardsCount - visibleCardsCount) * cardWidth;
+      const maxMove = (totalCardsCount - visibleCardsCount) * cardWidth - cardWidth;
       if (Math.abs(coverdPixels) >= maxMove) {
         rightButton.disabled = true;
         rightButton.style.opacity = '0.5';
@@ -83,11 +82,10 @@ function initializeCarousel(carouselClass) {
     }
   
     function moveToRight() {
-      const maxMove = (totalCardsCount - visibleCardsCount) * cardWidth;
+      const maxMove = (totalCardsCount - visibleCardsCount) * cardWidth - cardWidth;
       if (Math.abs(coverdPixels) < maxMove) {
         coverdPixels -= cardWidth;
         cards.style.transform = `translateX(${coverdPixels}px)`;
-        console.log(coverdPixels, maxMove)
         updateButtonStates();
       }
     }
@@ -96,7 +94,6 @@ function initializeCarousel(carouselClass) {
       if (coverdPixels < 0) {
         coverdPixels += cardWidth;
         cards.style.transform = `translateX(${coverdPixels}px)`;
-        console.log(coverdPixels)
         updateButtonStates();
       }
     }
