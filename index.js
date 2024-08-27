@@ -40,13 +40,12 @@ function initializeCarousel(carouselClass) {
   
     let coverdPixels = 0;
     const cardWidth = cards.querySelector(".node-card").getBoundingClientRect().width * 2;
-    const visibleCardsCount = Math.floor(carousel.clientWidth / cardWidth);
+    const visibleCardsCount = Math.floor(carousel.clientWidth / cardWidth) - 1;
     const totalCardsCount = cards.children.length;
     const leftArrowSpans = carousel.querySelectorAll(".arrow-left span")
     const rightArrowSpans = carousel.querySelectorAll(".arrow-right span")
-  
     rightButton.disabled = false;
-  
+
     function updateButtonStates() {
       if (coverdPixels === 0) {
         leftButton.disabled = true;
