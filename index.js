@@ -1,31 +1,33 @@
 var currentSection = "home";
 var current_gap = 0;
-var current_card_width = 0;
-var current_card_side_margin = 0;
 var Carousel = /** @class */ (function () {
     function Carousel(carouselClass) {
         var _this = this;
         this.coverdPixels = 0;
         this.totalCardsCount = 0;
         this.totalWidth = 0;
+        this.current_card_width = 0;
         this.carousel = document.querySelector(".".concat(carouselClass));
         var rightButton = this.carousel.querySelector(".arrow-right");
         var leftButton = this.carousel.querySelector(".arrow-left");
         this.totalCardsCount = this.carousel.querySelector('.cards').children.length;
-        rightButton.addEventListener('click', function () { return _this.moveToRight(); });
-        this.totalWidth = (this.totalCardsCount * (current_card_width + current_gap)) - current_gap + (current_card_side_margin);
-        console.log("total width: " + this.totalWidth, window.innerWidth);
+        this.current_card_width = this.carousel.querySelector('.cards').querySelectorAll('.node-card')[0].clientWidth;
+        this.totalWidth = (this.totalCardsCount - 2) * (this.current_card_width + current_gap);
         leftButton.addEventListener('click', function () { return _this.moveToLeft(); });
+        rightButton.addEventListener('click', function () { return _this.moveToRight(); });
         this.updateButtonStates();
         rightButton.disabled = false;
     }
+    Carousel.prototype.resizeCards = function () {
+        this.current_card_width = this.carousel.querySelector('.cards').querySelectorAll('.node-card')[0].clientWidth;
+        this.totalWidth = (this.totalCardsCount - 2) * (this.current_card_width + current_gap);
+    };
     Carousel.prototype.updateButtonStates = function () {
         var leftArrowSpans = this.carousel.querySelectorAll(".arrow-left span");
         var rightArrowSpans = this.carousel.querySelectorAll(".arrow-right span");
         var rightButton = this.carousel.querySelector(".arrow-right");
         var leftButton = this.carousel.querySelector(".arrow-left");
-        console.log("covered pixels: " + this.coverdPixels);
-        if (this.coverdPixels <= window.innerWidth / 2) {
+        if (this.coverdPixels <= 0) {
             leftButton.disabled = true;
             leftButton.style.opacity = '0.5';
             leftArrowSpans.forEach(function (span) {
@@ -40,7 +42,7 @@ var Carousel = /** @class */ (function () {
                 span.classList.remove('paused');
             });
         }
-        if (Math.abs(this.coverdPixels) >= this.totalWidth - current_gap) {
+        if (Math.abs(this.coverdPixels) >= this.totalWidth) {
             rightButton.disabled = true;
             rightButton.style.opacity = '0.5';
             rightArrowSpans.forEach(function (span) {
@@ -59,7 +61,8 @@ var Carousel = /** @class */ (function () {
     Carousel.prototype.moveToRight = function () {
         if (this.coverdPixels < this.totalWidth) {
             var cards = this.carousel.querySelector('.cards');
-            this.coverdPixels += current_card_width + current_gap;
+            this.coverdPixels += this.current_card_width + current_gap / 2;
+            this.coverdPixels = Math.min(this.totalWidth, this.coverdPixels);
             cards.style.transform = "translateX(".concat(-this.coverdPixels, "px)");
             this.updateButtonStates();
         }
@@ -67,7 +70,8 @@ var Carousel = /** @class */ (function () {
     Carousel.prototype.moveToLeft = function () {
         if (this.coverdPixels > 0) {
             var cards = this.carousel.querySelector('.cards');
-            this.coverdPixels -= current_card_width + current_gap;
+            this.coverdPixels -= this.current_card_width + current_gap / 2;
+            this.coverdPixels = Math.max(0., this.coverdPixels);
             cards.style.transform = "translateX(".concat(-this.coverdPixels, "px)");
             this.updateButtonStates();
         }
@@ -85,20 +89,11 @@ document.addEventListener('DOMContentLoaded', function () {
     var sections = document.querySelectorAll('.content-section');
     var headerSize = getComputedStyle(document.body).getPropertyValue('--headerSize');
     var observerOptions = {
-        root: null,
+        root: null, // Use the viewport as the container
         rootMargin: headerSize,
         threshold: 0.55 // Trigger when 50% of the section is visible
     };
     current_gap = Math.max(window.innerWidth * 0.3, 250);
-    // Ensure the node-card exists before accessing its width
-    var nodeCard = document.getElementsByClassName("node-card")[0];
-    if (nodeCard) {
-        current_card_width = nodeCard.getBoundingClientRect().width;
-    }
-    else {
-        console.warn("No elements with class 'node-card' found.");
-    }
-    current_card_side_margin = window.innerWidth * 0.4;
     var observer = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
             if (entry.isIntersecting) {
@@ -120,12 +115,9 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 window.addEventListener("resize", function () {
     // Recalculate card width and margins on window resize
-    var nodeCard = document.getElementsByClassName("node-card")[0];
-    if (nodeCard) {
-        current_card_width = nodeCard.getBoundingClientRect().width;
-    }
-    current_card_side_margin = window.innerWidth * 0.4;
-    current_gap = Math.max(window.innerWidth * 0.3, 250);
+    carousel1.resizeCards();
+    carousel2.resizeCards();
+    carousel3.resizeCards();
 });
 function submit_message() {
     return alert("Something went wrong, kindly try other methods!");

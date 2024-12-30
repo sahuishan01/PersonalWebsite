@@ -1,16 +1,13 @@
 var currentSection = "home";
 
 var current_gap: number = 0;
-var current_card_width: number = 0;
-var current_card_side_margin: number = 0;
-
-
 
 class Carousel {
     private carousel: Element;
     private coverdPixels = 0;
     private totalCardsCount = 0;
     private totalWidth = 0;
+    private current_card_width = 0;
     constructor(
         carouselClass: string,
     ) {
@@ -18,21 +15,25 @@ class Carousel {
         const rightButton: HTMLButtonElement = this.carousel!.querySelector(`.arrow-right`)!;
         const leftButton: HTMLButtonElement = this.carousel!.querySelector(`.arrow-left`)!;
         this.totalCardsCount = this.carousel!.querySelector('.cards')!.children.length;
-        rightButton.addEventListener('click', () => this.moveToRight());
-        this.totalWidth = (this.totalCardsCount * (current_card_width +  current_gap)) - current_gap + (current_card_side_margin);
-        console.log("total width: " + this.totalWidth, window.innerWidth);
+        this.current_card_width = (this.carousel!.querySelector('.cards')!.querySelectorAll('.node-card')![0] as HTMLDivElement).clientWidth;
+        this.totalWidth = (this.totalCardsCount - 2) * (this.current_card_width +  current_gap);
         leftButton.addEventListener('click', () => this.moveToLeft());
+        rightButton.addEventListener('click', () => this.moveToRight());
         this.updateButtonStates();
         rightButton.disabled = false;
     }
 
+    resizeCards(){
+        this.current_card_width = (this.carousel!.querySelector('.cards')!.querySelectorAll('.node-card')![0] as HTMLDivElement).clientWidth;
+        this.totalWidth = (this.totalCardsCount - 2) * (this.current_card_width +  current_gap);
+    }
+    
     updateButtonStates() {
         const leftArrowSpans = this.carousel.querySelectorAll(".arrow-left span");
         const rightArrowSpans = this.carousel.querySelectorAll(".arrow-right span");
         const rightButton: HTMLButtonElement = this.carousel!.querySelector(`.arrow-right`)!;
         const leftButton: HTMLButtonElement = this.carousel!.querySelector(`.arrow-left`)!;
-        console.log("covered pixels: " + this.coverdPixels);
-        if (this.coverdPixels <= window.innerWidth / 2) {
+        if (this.coverdPixels <= 0) {
             leftButton.disabled = true;
             leftButton.style.opacity = '0.5';
             leftArrowSpans.forEach(span => {
@@ -47,7 +48,7 @@ class Carousel {
             });
         }
 
-        if (Math.abs(this.coverdPixels) >= this.totalWidth - current_gap) {
+        if (Math.abs(this.coverdPixels) >= this.totalWidth) {
             rightButton.disabled = true;
             rightButton.style.opacity = '0.5';
             rightArrowSpans.forEach(span => {
@@ -67,7 +68,8 @@ class Carousel {
     moveToRight() {
         if (this.coverdPixels < this.totalWidth){
             const cards : HTMLDivElement = this.carousel!.querySelector('.cards')!;
-            this.coverdPixels += current_card_width + current_gap;
+            this.coverdPixels += this.current_card_width + current_gap / 2;
+            this.coverdPixels = Math.min(this.totalWidth, this.coverdPixels);
             cards.style.transform = `translateX(${-this.coverdPixels}px)`;
             this.updateButtonStates();
         }
@@ -76,7 +78,8 @@ class Carousel {
     moveToLeft() {
         if (this.coverdPixels > 0) {
             const cards : HTMLDivElement = this.carousel!.querySelector('.cards')!;
-            this.coverdPixels -= current_card_width + current_gap;
+            this.coverdPixels -= this.current_card_width + current_gap / 2;
+            this.coverdPixels = Math.max(0., this.coverdPixels);
             cards.style.transform = `translateX(${-this.coverdPixels}px)`;
             this.updateButtonStates();
         }
@@ -102,16 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     current_gap = Math.max(window.innerWidth * 0.3, 250);
 
-    // Ensure the node-card exists before accessing its width
-    const nodeCard = document.getElementsByClassName("node-card")[0];
-    if (nodeCard) {
-        current_card_width = nodeCard.getBoundingClientRect().width;
-    } else {
-        console.warn("No elements with class 'node-card' found.");
-    }
-
-    current_card_side_margin = window.innerWidth * 0.4;
-
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -136,12 +129,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 window.addEventListener("resize", () => {
     // Recalculate card width and margins on window resize
-    const nodeCard = document.getElementsByClassName("node-card")[0];
-    if (nodeCard) {
-        current_card_width = nodeCard.getBoundingClientRect().width;
-    }
-    current_card_side_margin = window.innerWidth * 0.4;
-    current_gap = Math.max(window.innerWidth * 0.3, 250);
+    carousel1.resizeCards();
+    carousel2.resizeCards();
+    carousel3.resizeCards();
 });
 
 function submit_message() {
