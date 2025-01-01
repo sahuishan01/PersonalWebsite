@@ -1,24 +1,21 @@
 var currentSection = "home";
 
-var current_gap: number = 0;
-
 class Carousel {
     private carousel: Element;
+    private totalWidth: number;
+    private currentCardWidth: number;
+    private currentGap: number;
     private coverdPixels = 0;
-    private totalCardsCount = 0;
-    private totalWidth = 0;
-    private current_card_width = 0;
     constructor(
         carouselClass: string,
     ) {
         this.carousel = document.querySelector(`.${carouselClass}`)!;
-        let cards = document.querySelector(`.${carouselClass}`)!.querySelector('.cards')!;
+        const cards = document.querySelector(`.${carouselClass}`)!.querySelector('.cards')!;
         this.totalWidth = cards.scrollWidth - window.innerWidth * 0.8;
         const rightButton: HTMLButtonElement = this.carousel!.querySelector(`.arrow-right`)!;
         const leftButton: HTMLButtonElement = this.carousel!.querySelector(`.arrow-left`)!;
-        this.totalCardsCount = this.carousel!.querySelector('.cards')!.children.length;
-        this.current_card_width = (this.carousel!.querySelectorAll('.node-card')![0] as HTMLDivElement).clientWidth;
-        // this.totalWidth = (this.totalCardsCount - 2) * (this.current_card_width +  current_gap);
+        this.currentCardWidth = (this.carousel!.querySelectorAll('.node-card')![0] as HTMLDivElement).clientWidth;
+        this.currentGap = Math.max(this.totalWidth * 0.1, 250);
         leftButton.addEventListener('click', () => this.moveToLeft());
         rightButton.addEventListener('click', () => this.moveToRight());
         this.updateButtonStates();
@@ -26,10 +23,11 @@ class Carousel {
     }
 
     resizeCards(){
-        this.current_card_width = (this.carousel!.querySelectorAll('.node-card')![0] as HTMLDivElement).clientWidth;
-        let cards : HTMLDivElement = this.carousel.querySelector('.cards')!;
+        this.currentCardWidth = (this.carousel!.querySelectorAll('.node-card')![0] as HTMLDivElement).clientWidth;
+        const cards : HTMLDivElement = this.carousel.querySelector('.cards')!;
         this.totalWidth = cards.scrollWidth - window.innerWidth * 0.8;
         this.coverdPixels = Math.max(Math.min(this.totalWidth, this.coverdPixels), 0);
+        this.currentGap = Math.max(this.totalWidth * 0.1, 250);
         cards.style.transform = `translateX(${-this.coverdPixels}px)`;
         this.updateButtonStates();
     }
@@ -74,7 +72,7 @@ class Carousel {
     moveToRight() {
         if (this.coverdPixels < this.totalWidth){
             const cards : HTMLDivElement = this.carousel!.querySelector('.cards')!;
-            this.coverdPixels += this.current_card_width + current_gap;
+            this.coverdPixels += this.currentCardWidth + this.currentGap;
             this.coverdPixels = Math.min(this.totalWidth, this.coverdPixels);
             cards.style.transform = `translateX(${-this.coverdPixels}px)`;
             this.updateButtonStates();
@@ -84,7 +82,7 @@ class Carousel {
     moveToLeft() {
         if (this.coverdPixels > 0) {
             const cards : HTMLDivElement = this.carousel!.querySelector('.cards')!;
-            this.coverdPixels -= this.current_card_width + current_gap;
+            this.coverdPixels -= this.currentCardWidth + this.currentGap;
             this.coverdPixels = Math.max(0., this.coverdPixels);
             cards.style.transform = `translateX(${-this.coverdPixels}px)`;
             this.updateButtonStates();
@@ -109,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
         threshold: 0.55 // Trigger when 50% of the section is visible
     };
 
-    current_gap = Math.max(window.innerWidth * 0.1, 250);
+    this.currentGap = Math.max(window.innerWidth * 0.1, 250);
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {

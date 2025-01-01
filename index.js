@@ -1,30 +1,27 @@
+var _this = this;
 var currentSection = "home";
-var current_gap = 0;
 var Carousel = /** @class */ (function () {
     function Carousel(carouselClass) {
         var _this = this;
         this.coverdPixels = 0;
-        this.totalCardsCount = 0;
-        this.totalWidth = 0;
-        this.current_card_width = 0;
         this.carousel = document.querySelector(".".concat(carouselClass));
         var cards = document.querySelector(".".concat(carouselClass)).querySelector('.cards');
         this.totalWidth = cards.scrollWidth - window.innerWidth * 0.8;
         var rightButton = this.carousel.querySelector(".arrow-right");
         var leftButton = this.carousel.querySelector(".arrow-left");
-        this.totalCardsCount = this.carousel.querySelector('.cards').children.length;
-        this.current_card_width = this.carousel.querySelectorAll('.node-card')[0].clientWidth;
-        // this.totalWidth = (this.totalCardsCount - 2) * (this.current_card_width +  current_gap);
+        this.currentCardWidth = this.carousel.querySelectorAll('.node-card')[0].clientWidth;
+        this.currentGap = Math.max(this.totalWidth * 0.1, 250);
         leftButton.addEventListener('click', function () { return _this.moveToLeft(); });
         rightButton.addEventListener('click', function () { return _this.moveToRight(); });
         this.updateButtonStates();
         rightButton.disabled = false;
     }
     Carousel.prototype.resizeCards = function () {
-        this.current_card_width = this.carousel.querySelectorAll('.node-card')[0].clientWidth;
+        this.currentCardWidth = this.carousel.querySelectorAll('.node-card')[0].clientWidth;
         var cards = this.carousel.querySelector('.cards');
         this.totalWidth = cards.scrollWidth - window.innerWidth * 0.8;
         this.coverdPixels = Math.max(Math.min(this.totalWidth, this.coverdPixels), 0);
+        this.currentGap = Math.max(this.totalWidth * 0.1, 250);
         cards.style.transform = "translateX(".concat(-this.coverdPixels, "px)");
         this.updateButtonStates();
     };
@@ -67,7 +64,7 @@ var Carousel = /** @class */ (function () {
     Carousel.prototype.moveToRight = function () {
         if (this.coverdPixels < this.totalWidth) {
             var cards = this.carousel.querySelector('.cards');
-            this.coverdPixels += this.current_card_width + current_gap;
+            this.coverdPixels += this.currentCardWidth + this.currentGap;
             this.coverdPixels = Math.min(this.totalWidth, this.coverdPixels);
             cards.style.transform = "translateX(".concat(-this.coverdPixels, "px)");
             this.updateButtonStates();
@@ -76,7 +73,7 @@ var Carousel = /** @class */ (function () {
     Carousel.prototype.moveToLeft = function () {
         if (this.coverdPixels > 0) {
             var cards = this.carousel.querySelector('.cards');
-            this.coverdPixels -= this.current_card_width + current_gap;
+            this.coverdPixels -= this.currentCardWidth + this.currentGap;
             this.coverdPixels = Math.max(0., this.coverdPixels);
             cards.style.transform = "translateX(".concat(-this.coverdPixels, "px)");
             this.updateButtonStates();
@@ -99,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function () {
         rootMargin: headerSize,
         threshold: 0.55 // Trigger when 50% of the section is visible
     };
-    current_gap = Math.max(window.innerWidth * 0.1, 250);
+    _this.currentGap = Math.max(window.innerWidth * 0.1, 250);
     var observer = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
             if (entry.isIntersecting) {
